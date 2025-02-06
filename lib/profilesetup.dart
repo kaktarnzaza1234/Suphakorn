@@ -8,35 +8,16 @@ import 'package:flutter/foundation.dart';
 import 'auth.dart';
 import 'home_page.dart'; // Import หน้า HomePage
 
-//Method หลักทีRun
-void main() {
-  runApp(ProfileSetup());
-}
-
-//Class stateless สั่งแสดงผลหนาจอ
-class ProfileSetup extends StatelessWidget {
-  static const String routeName = '/profilesetup';
-  const ProfileSetup({super.key});
-// This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.amber),
-        useMaterial3: true,
-      ),
-      home: profilesetup(),
-    );
-  }
-}
-
 //Class stateful เรียกใช้การทํางานแบบโต้ตอบ
 class profilesetup extends StatefulWidget {
+  static const String routeName = '/profile';
+  final Map<String, dynamic>? userData;
+  profilesetup({this.userData});
   @override
-  State<profilesetup> createState() => _MyHomePageState();
+  State<profilesetup> createState() => _ProfileSetupState();
 }
 
-class _MyHomePageState extends State<profilesetup> {
+class _ProfileSetupState extends State<profilesetup> {
 //ส่วนเขียน Code ภาษา dart เพื่อรับค่าจากหน้าจอมาคํานวณหรือมาทําบางอย่างและส่งค่ากลับไป
 
 //1) ประกาศตัวแปร formKey เป็น globalkey เพื่อตรวจสอบการรับค่าที่ผู้ใช้ป้อนผ่านฟอร์ม
@@ -137,6 +118,27 @@ class _MyHomePageState extends State<profilesetup> {
         context,
         MaterialPageRoute(builder: (context) => HomePage()),
       );
+    }
+  }
+
+  //ประกาศตัวแปร datetime และ prefix
+  DateTime? _birthDate;
+//ฟังก์ชัน ค่าเริ่มต้น โดยดึงค่าเดิมจากฐานข้อมูลขึ้นมาแสดงผล
+  @override
+  void initState() {
+    super.initState();
+    if (widget.userData != null) {
+      _selectedPrefix = widget.userData?['prefix'] ?? '';
+      _firstName.text = widget.userData?['firstName'] ?? '';
+      _lastName.text = widget.userData?['lastName'] ?? '';
+      _username.text = widget.userData?['username'] ?? '';
+      _phoneNumber.text = widget.userData?['phoneNumber'] ?? '';
+      _profileImageUrl = widget.userData?['profileImage'];
+      if (widget.userData?['birthDate'] != null) {
+        _birthDate = DateTime.parse(widget.userData!['birthDate']);
+        _birthDateController.text =
+            "${_birthDate!.toLocal()}".split(' ')[0]; // Format date
+      }
     }
   }
 
@@ -295,8 +297,8 @@ class _MyHomePageState extends State<profilesetup> {
                   child: ElevatedButton(
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
-                      // ดําเนินการเมื่อฟอร์มผ่านการตรวจสอบ
-                      _submitForm();
+                        // ดําเนินการเมื่อฟอร์มผ่านการตรวจสอบ
+                        _submitForm();
                       }
                     },
                     child: Text('บันทึก'),

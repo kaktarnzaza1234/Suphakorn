@@ -1,6 +1,31 @@
+import 'package:finalprojectsuphakorn/howto.dart';
+import 'package:finalprojectsuphakorn/share.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'auth.dart';
+import 'profilesetup.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+//Class state less สงั่ แสดงผลหนา้จอ
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+// This widget is the root of your application.
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: '...',
+      theme: ThemeData(
+        colorScheme:
+            ColorScheme.fromSeed(seedColor: Color.fromARGB(239, 245, 188, 2)),
+        useMaterial3: true,
+      ),
+      home: HomePage(),
+    );
+  }
+}
 
 class HomePage extends StatefulWidget {
   static const String routeName = '/homepage';
@@ -13,6 +38,15 @@ class _HomePageState extends State<HomePage> {
   late DatabaseReference _userRef;
   Map<String, dynamic>? _userData;
   bool _isLoading = true;
+  int _selectedIndex = 0; // Track selected tab
+
+  // List of widgets to display for each tab
+  final List<Widget> _pages = [
+    Center(child: Text('Home Screen')), // First tab (Home)
+    Center(child: Text('Profile Screen')), // Second tab (Profile)
+    Center(child: Text('Settings Screen')), // Third tab (Settings)
+  ];
+
   @override
   void initState() {
     super.initState();
@@ -52,6 +86,27 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  void _navigateToProfileSetup() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => profilesetup(
+          userData: _userData,
+        ),
+      ),
+    ).then((result) {
+      if (result == true) {
+        _fetchUserData(); // Refresh data after successful update
+      }
+    });
+  }
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
   Widget build(BuildContext context) {
     if (_isLoading) {
       return Scaffold(
@@ -60,6 +115,7 @@ class _HomePageState extends State<HomePage> {
         ),
       );
     }
+
     return Scaffold(
       appBar: AppBar(
         title: Text('หน้าแรก: Home Page'),
@@ -86,6 +142,21 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             ListTile(
+              leading: Icon(Icons.home), // ไอคอนของเมนู
+              title: Text('หน้าแรก:Home'),
+              onTap: () {
+                Navigator.pop(context); // ปิด Drawer
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.edit),
+              title: Text('แก้ไขประวัติ: Update Profile'),
+              onTap: () {
+                _navigateToProfileSetup(); // Navigate to profile setup
+                Navigator.pop(context); // Close drawer
+              },
+            ),
+            ListTile(
               leading: Icon(Icons.logout),
               title: Text('ออกจากระบบ: Logout'),
               onTap: () async {
@@ -95,11 +166,25 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
-      body: Center(
-        child: Text(
-          'ยินดีต้อนรับ: Welcome, ${_userData?['firstName'] ?? 'ผู้ใช้: User'}!',
-          style: TextStyle(fontSize: 24.0),
-        ),
+      body: _pages[
+          _selectedIndex], // Display the corresponding page based on selected tab
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.account_circle),
+            label: 'Profile',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.settings),
+            label: 'Settings',
+          ),
+        ],
       ),
     );
   }
