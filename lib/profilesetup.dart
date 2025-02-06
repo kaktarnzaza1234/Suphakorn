@@ -1,3 +1,4 @@
+import 'package:finalprojectsuphakorn/menu.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:typed_data';
@@ -116,7 +117,7 @@ class _ProfileSetupState extends State<profilesetup> {
 // ส่งข้อมูลกลับไปยังหน้า HomePage
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => HomePage()),
+        MaterialPageRoute(builder: (context) => menupage()),
       );
     }
   }

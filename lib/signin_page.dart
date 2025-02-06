@@ -86,7 +86,7 @@ class _LoginPageState extends State<LoginPage> {
                           if (_formKey.currentState!.validate()) {
                             _setLoading(true);
                             try {
-//เรียกใช้ฟัง์กชัน signInWithEmailAndpassword ที่หน้า auth.dart
+                              //เรียกใช้ฟัง์กชัน signInWithEmailAndpassword ที่หน้า auth.dart
                               await _auth.signInWithEmailAndPassword(
                                   _email, _password, context);
                             } catch (e) {
@@ -107,7 +107,7 @@ class _LoginPageState extends State<LoginPage> {
                           if (_formKey.currentState!.validate()) {
                             _setLoading(true);
                             try {
-//เรียกใช้ฟัง์กชัน registerWithEmailAndPassword ที่หน้า auth.dart
+                              //เรียกใช้ฟัง์กชัน registerWithEmailAndPassword ที่หน้า auth.dart
                               await _auth.registerWithEmailAndPassword(
                                   _email, _password, context);
                             } catch (e) {
