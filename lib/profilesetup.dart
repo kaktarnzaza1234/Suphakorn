@@ -10,7 +10,7 @@ import 'home_page.dart'; // Import หน้า HomePage
 
 //Class stateful เรียกใช้การทํางานแบบโต้ตอบ
 class profilesetup extends StatefulWidget {
-  static const String routeName = '/profile';
+  static const String routeName = '/profilesetup';
   final Map<String, dynamic>? userData;
   profilesetup({this.userData});
   @override

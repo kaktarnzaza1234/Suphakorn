@@ -1,3 +1,4 @@
+import 'package:finalprojectsuphakorn/menu.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -50,7 +51,7 @@ class MyApp extends StatelessWidget {
             return const Center(child: CircularProgressIndicator());
           }
           if (snapshot.hasData) {
-            return HomePage(); // ตรวจสอบว่ามี HomePage และทางานได้
+            return menupage(); // ตรวจสอบว่ามี HomePage และทางานได้
           } else {
             return const LoginPage(); // ตรวจสอบว่ามี LoginPage และทางานได้
           }
